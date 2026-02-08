@@ -5,27 +5,36 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+  background: #121213;
   min-height: 100vh;
   color: #fff;
+  display: flex;
+  justify-content: center;
 }
 
 .app {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 20px;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
+/* Header */
 header {
-  text-align: center;
-  margin-bottom: 24px;
+  border-bottom: 1px solid #3a3a3c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  height: 65px;
 }
 
 header h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.2rem;
   background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -33,82 +42,197 @@ header h1 {
 }
 
 header p {
-  color: #888;
-  margin-top: 4px;
+  color: #565758;
+  font-size: 12px;
 }
 
-.hard-mode {
+.hard-mode-btn {
+  background: none;
+  border: 1px solid #3a3a3c;
+  color: #565758;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hard-mode-btn.active {
+  border-color: #feca57;
+  color: #feca57;
+}
+
+.hard-mode-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Game Container */
+.game-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  overflow: hidden;
+}
+
+/* Target Display */
+.target-display {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.target-display p {
+  color: #565758;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.target-color-box {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  margin: 0 auto;
+  border: 2px solid #3a3a3c;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 12px;
-  color: #aaa;
-  cursor: pointer;
+  font-size: 24px;
+  transition: background-color 0.3s ease;
 }
 
-.hard-mode input {
-  accent-color: #feca57;
+.target-color-box.hidden {
+  background: #121213 !important;
+  border-style: dashed;
 }
 
-.game {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 20px;
-}
-
-.target-section,
-.guess-section {
-  text-align: center;
+/* Guesses Grid */
+.guesses-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   margin-bottom: 20px;
 }
 
-.target-section p,
-.guess-section p {
-  color: #888;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
+.guess-row {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
 }
 
-.color-box {
-  width: 120px;
-  height: 120px;
-  border-radius: 12px;
-  margin: 0 auto 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+.guess-tile {
+  width: 62px;
+  height: 62px;
+  border: 2px solid #3a3a3c;
+  border-radius: 4px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  transition: background-color 0.2s ease;
+  background: #121213;
+  transition: all 0.3s ease;
 }
 
-.target-values,
-.guess-values {
-  font-family: monospace;
-  font-size: 0.85rem;
-  color: #aaa;
+.guess-tile.filled {
+  border-color: #565758;
+  animation: pop 0.1s ease;
 }
 
-.sliders {
-  margin: 24px 0;
+.guess-tile.correct {
+  background: #538d4e;
+  border-color: #538d4e;
+}
+
+.guess-tile.close {
+  background: #b59f3b;
+  border-color: #b59f3b;
+}
+
+.guess-tile.far {
+  background: #3a3a3c;
+  border-color: #3a3a3c;
+}
+
+.guess-tile .color-preview {
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+}
+
+.guess-tile .delta {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  position: absolute;
+  bottom: 4px;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Current Guess */
+.current-guess {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.current-tile {
+  width: 62px;
+  height: 62px;
+  border: 2px solid #3a3a3c;
+  border-radius: 4px;
+  background: #121213;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.current-tile label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.current-tile span {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Controls */
+.controls {
+  width: 100%;
+  max-width: 330px;
+  margin-bottom: 20px;
 }
 
 .slider-group {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
-.slider-group label {
-  display: block;
+.slider-label {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 4px;
+  font-size: 12px;
   font-weight: 600;
-  font-size: 0.9rem;
 }
 
 .slider {
   width: 100%;
-  height: 8px;
-  border-radius: 4px;
+  height: 20px;
+  border-radius: 10px;
   outline: none;
   -webkit-appearance: none;
   appearance: none;
@@ -118,151 +242,185 @@ header p {
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 2px solid #121213;
 }
 
 .slider::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
-  border: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 2px solid #121213;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .slider.red {
-  background: linear-gradient(to right, #000, #ff0000);
+  background: linear-gradient(to right, #330000, #ff0000);
 }
 
 .slider.green {
-  background: linear-gradient(to right, #000, #00ff00);
+  background: linear-gradient(to right, #003300, #00ff00);
 }
 
 .slider.blue {
-  background: linear-gradient(to right, #000, #0000ff);
+  background: linear-gradient(to right, #000033, #0000ff);
 }
 
+/* Hint */
 .hint {
   text-align: center;
-  margin: 16px 0;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: #3a3a3c;
+  border-radius: 4px;
+  max-width: 330px;
 }
 
 .hint p {
-  color: #ddd;
-  font-size: 0.95rem;
-}
-
-.delta {
-  color: #888;
-  font-size: 0.8rem;
-  margin-top: 4px;
-}
-
-.guess-btn,
-.share-btn {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
 }
 
+/* Buttons */
 .guess-btn {
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  width: 100%;
+  max-width: 330px;
+  padding: 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #538d4e;
   color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: opacity 0.2s;
 }
 
 .guess-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  opacity: 0.9;
 }
 
 .guess-btn:disabled {
-  background: #444;
+  background: #3a3a3c;
   cursor: not-allowed;
 }
 
-.history {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.history > p {
-  color: #888;
-  margin-bottom: 12px;
-  font-size: 0.85rem;
-}
-
-.guess-row {
+/* Result Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  justify-content: center;
+  z-index: 100;
 }
 
-.mini-color {
-  width: 24px;
-  height: 24px;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-
-.guess-text {
-  font-family: monospace;
-  font-size: 0.85rem;
-  color: #ccc;
-}
-
-.result {
+.modal {
+  background: #121213;
+  border: 1px solid #3a3a3c;
+  border-radius: 8px;
+  padding: 32px;
   text-align: center;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 350px;
+  width: 90%;
 }
 
-.result h2 {
-  font-size: 1.3rem;
+.modal h2 {
+  font-size: 24px;
   margin-bottom: 16px;
-  color: #fff;
+}
+
+.modal .target-reveal {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  margin: 0 auto 16px;
+  border: 2px solid #3a3a3c;
+}
+
+.modal p {
+  color: #565758;
+  margin-bottom: 24px;
+  font-size: 14px;
 }
 
 .share-btn {
-  background: linear-gradient(90deg, #11998e, #38ef7d);
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #538d4e;
   color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   margin-bottom: 12px;
 }
 
-.share-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(56, 239, 125, 0.4);
+.play-again-btn {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #3a3a3c;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  color: #fff;
 }
 
-.new-game {
-  color: #888;
-  font-size: 0.85rem;
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #121213;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-weight: 600;
+  z-index: 200;
+  animation: fadeInOut 2s ease;
 }
 
-@media (max-width: 400px) {
-  header h1 {
-    font-size: 2.5rem;
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  20%, 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .guess-tile,
+  .current-tile {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (min-width: 768px) {
+  .app {
+    max-width: 600px;
   }
   
-  .color-box {
-    width: 100px;
-    height: 100px;
+  .guess-tile,
+  .current-tile {
+    width: 70px;
+    height: 70px;
   }
 }
